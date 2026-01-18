@@ -1,0 +1,21 @@
+# Build files
+build/
+CMakeFiles/
+CMakeCache.txt
+Makefile
+cmake_install.cmake
+
+# Keploy
+keploy/reports/
+keploy_agent.log
+keploy.yml
+
+# OS
+.DS_Store
+
+# Editor
+.vscode/
+.idea/
+
+# Binaries
+*.out
