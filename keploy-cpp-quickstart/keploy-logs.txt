@@ -1,0 +1,61 @@
+🐰 Keploy: 2026-01-18T14:06:29.883232699Z 	[34mINFO[0m	🔴 Starting Keploy recording... Please wait.
+🐰 Keploy: 2026-01-18T14:06:29.883923716Z 	[34mINFO[0m	Using available ports	{"agent-port": 43041, "proxy-port": 16789, "dns-port": 26789}
+🐰 Keploy: 2026-01-18T14:06:29.884419841Z 	[34mINFO[0m	Application command provided :	{"cmd": "docker compose up"}
+🐰 Keploy: 2026-01-18T14:06:29.884647645Z 	[34mINFO[0m	Application command to execute :	{"cmd": "docker compose up"}
+🐰 Keploy: 2026-01-18T14:06:29.8850095Z 	[34mINFO[0m	Found docker compose file paths: [docker-compose.yml]
+🐰 Keploy: 2026-01-18T14:06:29.88571235Z 	[34mINFO[0m	Created new docker-compose for keploy internal use	{"path": "docker-compose-tmp.yaml"}
+🐰 Keploy: 2026-01-18T14:06:29.886496271Z 	[34mINFO[0m	Modified docker compose command to run keploy compose file	{"cmd": "docker compose -f ./docker-compose-tmp.yaml up --abort-on-container-exit --exit-code-from app"}
+🐰 Keploy: 2026-01-18T14:06:29.88660781Z 	[34mINFO[0m	Client setup completed successfully
+🐰 Keploy: 2026-01-18T14:06:29.886796702Z 	[34mINFO[0m	Command type:	{"commandType": "docker-compose"}
+🐰 Keploy: 2026-01-18T14:06:29.88697314Z 	[34mINFO[0m	🟢 Waiting for keploy-agent to be ready for docker compose...	{"Agent-uri": "http://localhost:43041/agent"}
+🐰 Keploy: 2026-01-18T14:06:29.887853201Z 	[34mINFO[0m	Docker compose logs are being written to file	{"path": "/tmp/docker-compose-tmp-keploy-1768745189.logs"}
+🐰 Keploy: 2026-01-18T14:06:29.888596567Z 	[34mINFO[0m	You can view live logs using tail -f	{"command": "tail -f /tmp/docker-compose-tmp-keploy-1768745189.logs"}
+🐰 Keploy: 2026-01-18T14:06:29.888667499Z 	[34mINFO[0m	Starting Application :	{"executing_cli": "/usr/bin/sh -c docker compose -f ./docker-compose-tmp.yaml up --abort-on-container-exit --exit-code-from app"}
+🐰 Keploy: 2026-01-18T14:06:42.890093316Z 	[34mINFO[0m	🟢 Keploy agent is ready to record test cases and mocks.
+🐰 Keploy: 2026-01-18T14:06:42.890828827Z 	[34mINFO[0m	🟢 Keploy is now recording test cases and mocks for you application...
+🐰 Keploy: 2026-01-18T14:06:42.891044589Z 	[34mINFO[0m	🟢 Making keploy-agent ready for docker compose...
+🐰 Keploy: 2026-01-18T14:06:42.891183368Z 	[34mINFO[0m	🔵 Connecting to incoming test cases stream...
+🐰 Keploy: 2026-01-18T14:06:42.891354136Z 	[34mINFO[0m	🔵 Connecting to outgoing mocks stream...
+🐰 Keploy: 2026-01-18T14:10:16.57339413Z 	[34mINFO[0m	🔴 Stopping Keploy recording... in the defer
+🐰 Keploy: 2026-01-18T14:10:52.689242322Z 	[34mINFO[0m	🔴 Starting Keploy recording... Please wait.
+🐰 Keploy: 2026-01-18T14:10:52.68983139Z 	[34mINFO[0m	Using available ports	{"agent-port": 40419, "proxy-port": 16789, "dns-port": 26789}
+🐰 Keploy: 2026-01-18T14:10:52.689893867Z 	[34mINFO[0m	Application command provided :	{"cmd": "docker compose up"}
+🐰 Keploy: 2026-01-18T14:10:52.690052823Z 	[34mINFO[0m	Application command to execute :	{"cmd": "docker compose up"}
+🐰 Keploy: 2026-01-18T14:10:52.690219664Z 	[34mINFO[0m	Found docker compose file paths: [docker-compose.yml]
+🐰 Keploy: 2026-01-18T14:10:52.691144819Z 	[34mINFO[0m	Created new docker-compose for keploy internal use	{"path": "docker-compose-tmp.yaml"}
+🐰 Keploy: 2026-01-18T14:10:52.691256166Z 	[34mINFO[0m	Modified docker compose command to run keploy compose file	{"cmd": "docker compose -f ./docker-compose-tmp.yaml up --abort-on-container-exit --exit-code-from app"}
+🐰 Keploy: 2026-01-18T14:10:52.69130621Z 	[34mINFO[0m	Client setup completed successfully
+🐰 Keploy: 2026-01-18T14:10:52.691321227Z 	[34mINFO[0m	Command type:	{"commandType": "docker-compose"}
+🐰 Keploy: 2026-01-18T14:10:52.691334623Z 	[34mINFO[0m	🟢 Waiting for keploy-agent to be ready for docker compose...	{"Agent-uri": "http://localhost:40419/agent"}
+🐰 Keploy: 2026-01-18T14:10:52.692586955Z 	[34mINFO[0m	Docker compose logs are being written to file	{"path": "/tmp/docker-compose-tmp-keploy-1768745452.logs"}
+🐰 Keploy: 2026-01-18T14:10:52.693213635Z 	[34mINFO[0m	You can view live logs using tail -f	{"command": "tail -f /tmp/docker-compose-tmp-keploy-1768745452.logs"}
+🐰 Keploy: 2026-01-18T14:10:52.693408348Z 	[34mINFO[0m	Starting Application :	{"executing_cli": "/usr/bin/sh -c docker compose -f ./docker-compose-tmp.yaml up --abort-on-container-exit --exit-code-from app"}
+🐰 Keploy: 2026-01-18T14:10:55.693988494Z 	[34mINFO[0m	🟢 Keploy agent is ready to record test cases and mocks.
+🐰 Keploy: 2026-01-18T14:10:55.694111994Z 	[34mINFO[0m	🟢 Keploy is now recording test cases and mocks for you application...
+🐰 Keploy: 2026-01-18T14:10:55.6941365Z 	[34mINFO[0m	🟢 Making keploy-agent ready for docker compose...
+🐰 Keploy: 2026-01-18T14:10:55.694193055Z 	[34mINFO[0m	🔵 Connecting to incoming test cases stream...
+🐰 Keploy: 2026-01-18T14:10:55.694738854Z 	[34mINFO[0m	🔵 Connecting to outgoing mocks stream...
+🐰 Keploy: 2026-01-18T14:15:07.496600216Z 	[34mINFO[0m	🟢 Successfully connected to outgoing mocks stream.
+🐰 Keploy: 2026-01-18T14:15:07.710051255Z 	[34mINFO[0m	🟢 Successfully connected to incoming test cases stream.
+🐰 Keploy: 2026-01-18T14:15:07.720810189Z 	[34mINFO[0m	🟠 Keploy has captured test cases for the user's application.	{"path": "/workspaces/Keploy_Issue_3521/keploy-cpp-quickstart/keploy/test-set-1/tests", "testcase name": "test-1"}
+🐰 Keploy: 2026-01-18T14:15:16.362172078Z 	[34mINFO[0m	🟠 Keploy has captured test cases for the user's application.	{"path": "/workspaces/Keploy_Issue_3521/keploy-cpp-quickstart/keploy/test-set-1/tests", "testcase name": "test-2"}
+🐰 Keploy: 2026-01-18T14:15:39.337431231Z 	[34mINFO[0m	🟠 Keploy has captured test cases for the user's application.	{"path": "/workspaces/Keploy_Issue_3521/keploy-cpp-quickstart/keploy/test-set-1/tests", "testcase name": "test-3"}
+🐰 Keploy: 2026-01-22T16:14:21.759891688Z 	[34mINFO[0m	🔴 Starting Keploy recording... Please wait.
+🐰 Keploy: 2026-01-22T16:14:21.761642922Z 	[34mINFO[0m	Using available ports	{"agent-port": 46321, "proxy-port": 16789, "dns-port": 26789}
+🐰 Keploy: 2026-01-22T16:14:21.761679891Z 	[34mINFO[0m	Application command provided :	{"cmd": "docker compose up"}
+🐰 Keploy: 2026-01-22T16:14:21.771971492Z 	[34mINFO[0m	Application command to execute :	{"cmd": "docker compose up"}
+🐰 Keploy: 2026-01-22T16:14:21.772391565Z 	[34mINFO[0m	Found docker compose file paths: [docker-compose.yml]
+🐰 Keploy: 2026-01-22T16:14:21.773130283Z 	[34mINFO[0m	Created new docker-compose for keploy internal use	{"path": "docker-compose-tmp.yaml"}
+🐰 Keploy: 2026-01-22T16:14:21.773244796Z 	[34mINFO[0m	Modified docker compose command to run keploy compose file	{"cmd": "docker compose -f ./docker-compose-tmp.yaml up --abort-on-container-exit --exit-code-from app"}
+🐰 Keploy: 2026-01-22T16:14:21.773294128Z 	[34mINFO[0m	Client setup completed successfully
+🐰 Keploy: 2026-01-22T16:14:21.773340885Z 	[34mINFO[0m	Command type:	{"commandType": "docker-compose"}
+🐰 Keploy: 2026-01-22T16:14:21.77338116Z 	[34mINFO[0m	🟢 Waiting for keploy-agent to be ready for docker compose...	{"Agent-uri": "http://localhost:46321/agent"}
+🐰 Keploy: 2026-01-22T16:14:21.775330534Z 	[34mINFO[0m	Docker compose logs are being written to file	{"path": "/tmp/docker-compose-tmp-keploy-1769098461.logs"}
+🐰 Keploy: 2026-01-22T16:14:21.776023896Z 	[34mINFO[0m	You can view live logs using tail -f	{"command": "tail -f /tmp/docker-compose-tmp-keploy-1769098461.logs"}
+🐰 Keploy: 2026-01-22T16:14:21.776623274Z 	[34mINFO[0m	Starting Application :	{"executing_cli": "/usr/bin/sh -c docker compose -f ./docker-compose-tmp.yaml up --abort-on-container-exit --exit-code-from app"}
+🐰 Keploy: 2026-01-22T16:14:29.77830846Z 	[34mINFO[0m	🟢 Keploy agent is ready to record test cases and mocks.
+🐰 Keploy: 2026-01-22T16:14:29.778481352Z 	[34mINFO[0m	🟢 Keploy is now recording test cases and mocks for you application...
+🐰 Keploy: 2026-01-22T16:14:29.778509835Z 	[34mINFO[0m	🟢 Making keploy-agent ready for docker compose...
+🐰 Keploy: 2026-01-22T16:14:29.778622397Z 	[34mINFO[0m	🔵 Connecting to incoming test cases stream...
+🐰 Keploy: 2026-01-22T16:14:29.778628256Z 	[34mINFO[0m	🔵 Connecting to outgoing mocks stream...
+🐰 Keploy: 2026-01-22T16:14:33.362350865Z 	[34mINFO[0m	🟢 Successfully connected to outgoing mocks stream.
