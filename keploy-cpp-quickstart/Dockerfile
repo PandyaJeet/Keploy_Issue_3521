@@ -8,7 +8,8 @@ RUN apt update && apt install -y \
     libpqxx-dev \
     libasio-dev \
     git \
-    curl
+    curl \
+    pkg-config
 
 COPY . .
 
