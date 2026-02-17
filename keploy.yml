@@ -13,7 +13,7 @@ incomingProxyPort: 36789
 debug: false
 disableTele: false
 disableANSI: false
-containerName: keploy-cpp-quickstart-app-1
+containerName: keploy-cpp-app
 networkName: ""
 buildDelay: 30
 test:

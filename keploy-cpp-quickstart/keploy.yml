@@ -1,0 +1,18 @@
+# Keploy configuration for the C++ Quickstart
+# See: https://keploy.io/docs/running-keploy/configuration-file/
+
+path: ""
+appName: keploy-cpp-quickstart
+command: docker compose up --build
+containerName: keploy-cpp-app
+networkName: ""
+buildDelay: 30
+
+test:
+  delay: 5
+  apiTimeout: 10
+  ignoreOrdering: true
+  mocking: true
+
+record:
+  filters: []

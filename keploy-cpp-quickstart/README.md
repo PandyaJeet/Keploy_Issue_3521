@@ -1,16 +1,45 @@
-# Keploy C++ Quickstart
+# Keploy C++ Quickstart – Todo CRUD API
 
-A comprehensive guide to building, testing, and ensuring the reliability of a C++ backend using [Crow](https://crowcpp.org/), [PostgreSQL](https://www.postgresql.org/), and [Keploy](https://keploy.io/).
+A beginner-friendly guide to building, testing, and ensuring reliability of a **C++ REST API** using [Crow](https://crowcpp.org/), [PostgreSQL](https://www.postgresql.org/), and [Keploy](https://keploy.io/).
+
+> **Keploy** is language-agnostic — it records real API traffic and replays it as regression tests, **without SDKs or manual instrumentation**.
+
+---
+
+## Table of Contents
+
+- [Project Overview](#-project-overview)
+- [Folder Structure](#-folder-structure)
+- [Prerequisites](#-prerequisites)
+- [Local Setup (Without Docker)](#-local-setup-without-docker)
+- [Docker Compose Setup](#-docker-compose-setup)
+- [Keploy Integration](#-keploy-integration)
+  - [Record Mode](#-record-mode)
+  - [Replay / Test Mode](#-replay--test-mode)
+- [API Reference](#-api-reference)
+- [Expected Outputs](#-expected-outputs)
+- [Troubleshooting](#-troubleshooting)
+
+---
 
 ## 📖 Project Overview
 
-This project demonstrates a production-grade setup for a C++ backend service. It solves the problem of "how do I test my C++ microservice efficiently?" by introducing **Keploy**, an open-source testing platform that generates test cases from API traffic.
+This project implements a **Todo CRUD API** in C++ with the following stack:
+
+| Layer       | Technology                      |
+|:----------- |:------------------------------- |
+| Framework   | [Crow](https://crowcpp.org/) (header-only C++ HTTP framework) |
+| Database    | [PostgreSQL 15](https://www.postgresql.org/) via `libpqxx` |
+| Build       | [CMake](https://cmake.org/) ≥ 3.14 |
+| Container   | Docker + Docker Compose |
+| Testing     | [Keploy](https://keploy.io/) (record & replay) |
 
 **What you will learn:**
-- How to build a REST API with **C++ (Crow)**.
-- How to integrate **PostgreSQL** using `libpqxx`.
-- How to containerize the application with **Docker**.
-- How to use **Keploy** to record API calls and replay them as regression tests.
+
+- Build a full CRUD REST API in C++ with Crow
+- Connect to PostgreSQL using `libpqxx`
+- Containerise the app with Docker (multi-stage build)
+- Use Keploy to record API calls and replay them as regression tests
 
 ---
 
@@ -19,216 +48,308 @@ This project demonstrates a production-grade setup for a C++ backend service. It
 ```
 keploy-cpp-quickstart/
 ├── src/
-│   └── main.cpp           # Main application logic (API endpoints, DB connection)
-├── Crow/                  # Crow framework (header-only C++ web framework)
-├── Dockerfile             # Instructions to build the container image
-├── docker-compose.yml     # Defines the App and Database services
-├── CMakeLists.txt         # Build configuration for CMake
-├── keploy.yml             # Keploy configuration file
-├── README.md              # This documentation
-└── .gitignore             # Files to ignore in Git
+│   └── main.cpp             # Application logic — routes, DB connection, CRUD
+├── keploy/                  # Keploy test-sets & mocks (generated at runtime)
+├── CMakeLists.txt           # Build configuration (fetches Crow automatically)
+├── Dockerfile               # Multi-stage Docker build
+├── docker-compose.yml       # App + PostgreSQL services
+├── keploy.yml               # Keploy configuration
+├── .gitignore               # Ignored files
+└── README.md                # This file
 ```
 
 ---
 
-## 🛠️ Local Setup (Without Docker)
+## 🔧 Prerequisites
 
-You can run the application directly on your machine for development.
+| Tool | Version | Installation |
+|:---- |:------- |:------------ |
+| C++ compiler (g++) | ≥ 9 | `sudo apt install g++` |
+| CMake | ≥ 3.14 | `sudo apt install cmake` |
+| libpqxx | ≥ 6 | `sudo apt install libpqxx-dev` |
+| Asio headers | — | `sudo apt install libasio-dev` |
+| PostgreSQL | ≥ 13 | `sudo apt install postgresql` |
+| Docker & Compose | latest | [docs.docker.com](https://docs.docker.com/get-docker/) |
+| Keploy | latest | [keploy.io/docs/server/installation](https://keploy.io/docs/server/installation/) |
 
-### 1. Prerequisites
+---
 
-You need `cmake`, a C++ compiler, and `libpqxx` (PostgreSQL C++ client) installed.
+## 💻 Local Setup (Without Docker)
 
-**Ubuntu/Debian:**
+### 1. Install Dependencies
+
+**Ubuntu / Debian:**
+
 ```bash
 sudo apt update
-sudo apt install -y g++ cmake libpqxx-dev libasio-dev postgresql postgresql-contrib
+sudo apt install -y g++ cmake libpqxx-dev libasio-dev \
+                    postgresql postgresql-contrib pkg-config git
 ```
 
-**MacOS:**
+**macOS:**
+
 ```bash
-brew install cmake libpqxx postgresql
+brew install cmake libpqxx postgresql asio pkg-config
 ```
 
-### 2. Setup Database
+### 2. Set Up PostgreSQL
 
-Start your local PostgreSQL service and create a user/database:
 ```bash
-# Start Postgres (Linux)
-sudo service postgresql start
+# Start PostgreSQL
+sudo service postgresql start          # Linux
+# brew services start postgresql       # macOS
 
-# Login to Postgres
-sudo -u postgres psql
-
-# Inside SQL shell:
-CREATE USER postgres WITH PASSWORD 'postgres';
-CREATE DATABASE keploy_db;
-GRANT ALL PRIVILEGES ON DATABASE keploy_db TO postgres;
-\q
+# Create the database
+sudo -u postgres psql -c "CREATE DATABASE keploy_db;"
 ```
 
-### 3. Build & Run
+### 3. Build the Application
 
 ```bash
-mkdir build
-cd build
-cmake ..
-make
+cd keploy-cpp-quickstart
 
-# Run the app (using localhost for DB)
-DB_HOST=localhost ./app
+# Configure & build (Crow is fetched automatically via CMake)
+cmake -B build
+cmake --build build --parallel $(nproc)
 ```
 
-### 4. Test the API
+### 4. Run the Application
 
-**Create a Todo:**
 ```bash
+DB_HOST=localhost ./build/app
+```
+
+You should see:
+
+```
+[db] Connected to PostgreSQL (attempt 1)
+[db] Migration complete.
+[app] Starting on port 8080 …
+```
+
+### 5. Test the Endpoints
+
+```bash
+# Health check
+curl http://localhost:8080/health
+
+# Create a todo
 curl -X POST http://localhost:8080/todos \
-  -d '{"task": "Learn Keploy"}' \
-  -H "Content-Type: application/json"
-```
+  -H "Content-Type: application/json" \
+  -d '{"task": "Learn Keploy"}'
 
-**Get Todos:**
-```bash
+# List all todos
 curl http://localhost:8080/todos
-```
 
-**Expected Output:**
-```json
-[{"id":1,"task":"Learn Keploy"}]
+# Get a single todo
+curl http://localhost:8080/todos/1
+
+# Update a todo
+curl -X PUT http://localhost:8080/todos/1 \
+  -H "Content-Type: application/json" \
+  -d '{"task": "Master Keploy", "done": true}'
+
+# Delete a todo
+curl -X DELETE http://localhost:8080/todos/1
 ```
 
 ---
 
-## 🐳 Docker Setup (Recommended)
+## 🐳 Docker Compose Setup
 
-This sets up the Application and Database automatically.
+Docker Compose spins up **both the app and PostgreSQL** with a single command.
 
-**File:** `docker-compose.yml`
+### `docker-compose.yml` highlights
 
-```yaml
-services:
-  app:
-    build: .
-    ports:
-      - "8080:8080"
-    depends_on:
-      - db
-    environment:
-      - DB_HOST=db  # Points to the service name 'db'
+- **`db` service**: PostgreSQL 15 with a `healthcheck` — the app won't start until the DB is ready.
+- **`app` service**: Multi-stage build; `depends_on … condition: service_healthy`.
+- **Persistent volume** `pgdata` keeps data across restarts.
 
-  db:
-    image: postgres:15
-    environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: keploy_db
-```
-
-### Run with Docker Compose
+### Run
 
 ```bash
+cd keploy-cpp-quickstart
+
+# Build & start
 docker compose up --build
+```
+
+The app is available at **http://localhost:8080**.
+
+To stop:
+
+```bash
+docker compose down          # keeps volume
+docker compose down -v       # removes volume too
 ```
 
 ---
 
 ## 🐰 Keploy Integration
 
-Keploy acts as a middleware that records your API traffic and converts it into test cases.
+Keploy records your API traffic and converts it into test cases — **zero code changes required**.
 
-### 📼 1. Record Mode
-
-In Record mode, Keploy acts as a proxy, capturing network calls.
+### Install Keploy
 
 ```bash
-# Start Keploy in Record Mode
+curl --silent -O -L https://keploy.io/install.sh && source install.sh
+```
+
+Verify:
+
+```bash
+keploy --version
+```
+
+---
+
+### 📼 Record Mode
+
+In **Record** mode Keploy proxies traffic, captures HTTP requests/responses **and** database calls, and saves them as YAML test-sets.
+
+```bash
 keploy record \
-  --cmd-type docker-compose \
-  -c "docker compose up" \
-  --container-name app
+  -c "docker compose up --build" \
+  --container-name keploy-cpp-app
 ```
 
-**Steps to Record:**
-1. Run the command above. Keploy will start your containers.
-2. In a separate terminal, make API calls:
+> **Note:** The `--container-name` must match the `container_name` in `docker-compose.yml`.
+
+While Keploy is recording, fire some requests in **another terminal**:
 
 ```bash
-# Add a Task
+# 1. Create todos
 curl -X POST http://localhost:8080/todos \
-  -d '{"task": "Master Keploy"}' \
-  -H "Content-Type: application/json"
+  -H "Content-Type: application/json" \
+  -d '{"task": "Buy groceries"}'
 
-# Retrieve Tasks
+curl -X POST http://localhost:8080/todos \
+  -H "Content-Type: application/json" \
+  -d '{"task": "Read a book"}'
+
+# 2. List todos
 curl http://localhost:8080/todos
+
+# 3. Get single todo
+curl http://localhost:8080/todos/1
+
+# 4. Update a todo
+curl -X PUT http://localhost:8080/todos/1 \
+  -H "Content-Type: application/json" \
+  -d '{"task": "Buy organic groceries", "done": true}'
+
+# 5. Delete a todo
+curl -X DELETE http://localhost:8080/todos/2
 ```
 
-3. Keploy captures these requests and saves them as test cases (`test-set-0.yaml`) and mocks (`mocks.yaml`) in the `keploy/` directory.
-4. Stop Keploy with `Ctrl+C`.
+Stop recording with **Ctrl + C**. Keploy creates files under `keploy/`:
 
-### 🎬 2. Replay Mode (Testing)
+```
+keploy/
+├── test-set-0/
+│   ├── tests/
+│   │   ├── test-1.yaml
+│   │   ├── test-2.yaml
+│   │   └── ...
+│   └── mocks.yaml
+```
 
-Now, let's verify if the application still works as expected. Keploy will replay the recorded requests and compare the responses.
+---
+
+### 🎬 Replay / Test Mode
+
+Replay mode re-sends the recorded requests and **compares** live responses against the recorded ones. Database calls are mocked automatically.
 
 ```bash
-# Start Keploy in Test Mode
 keploy test \
-  --cmd-type docker-compose \
-  -c "docker compose up" \
-  --container-name app
+  -c "docker compose up --build" \
+  --container-name keploy-cpp-app
 ```
 
 **What happens:**
-- Keploy starts the app.
-- It replays the recorded API calls.
-- It compares the *actual* response from the app with the *recorded* response.
-- It matches database interactions using the recorded mocks (no live DB needed in theory, but for this setup we spin up the whole stack).
+
+1. Keploy starts the app and DB via Docker Compose.
+2. It replays every recorded request from the test-set.
+3. Each response is compared field-by-field with the recorded expectation.
+4. A pass/fail summary is printed.
 
 ---
 
-## ✅ expected Output
+## 🔌 API Reference
 
-**During Replay:**
+| Method   | Endpoint       | Description           | Request Body                        | Success Response            |
+|:-------- |:-------------- |:--------------------- |:----------------------------------- |:--------------------------- |
+| `GET`    | `/health`      | Health + DB check     | —                                   | `200 {"status":"ok","database":"connected"}` |
+| `GET`    | `/todos`       | List all todos        | —                                   | `200 [{"id":1,"task":"…","done":false}]` |
+| `GET`    | `/todos/<id>`  | Get a single todo     | —                                   | `200 {"id":1,"task":"…","done":false}` |
+| `POST`   | `/todos`       | Create a todo         | `{"task":"…"}`                      | `201 {"id":1,"task":"…","done":false}` |
+| `PUT`    | `/todos/<id>`  | Update a todo         | `{"task":"…","done":true}` (partial)| `200 {"id":1,"task":"…","done":true}` |
+| `DELETE` | `/todos/<id>`  | Delete a todo         | —                                   | `200 {"message":"Todo deleted","id":1}` |
+
+---
+
+## ✅ Expected Outputs
+
+### Application Startup
 
 ```
-Test Run Summary:
-  Total tests: 2
-  Passed: 2
-  Failed: 0
-  Time taken: 1.2s
-
-<INFO> Test run complete
+[db] Connected to PostgreSQL (attempt 1)
+[db] Migration complete.
+[app] Starting on port 8080 …
 ```
 
-If you modify the code (e.g., change the response format) and run `keploy test` again, it will report a **FAIL**, catching the regression.
+### Keploy Record
+
+```
+🐰 Keploy has captured test cases for the user's]
+  Total captured: 6
+  Saved to: keploy/test-set-0
+```
+
+### Keploy Test (Replay)
+
+```
+🐰 Keploy Test Summary
+
+  Test Set: test-set-0
+  Total tests: 6
+  Passed:      6
+  Failed:      0
+
+  Result: ALL PASSED ✅
+```
+
+If you introduce a regression (e.g. rename `"task"` to `"title"` in the response), the replay will **FAIL** and show the diff — catching the breaking change automatically.
 
 ---
 
-## 🔌 API Specification
+## ❓ Troubleshooting
 
-| Method | Endpoint | Description | Request Body | Response |
-| :--- | :--- | :--- | :--- | :--- |
-| `POST` | `/todos` | Create a new todo item | `{"task": "..."}` | `201 Inserted` |
-| `GET` | `/todos` | List all todo items | N/A | `[{"id": 1, "task": "..."}]` |
-
----
-
-## ❓ Common Errors & Fixes
-
-**1. `Failed to connect to DB`**
-- **Cause:** Database container isn't ready when App starts.
-- **Fix:** In Docker, we use `depends_on`, but sometimes Postgres takes a few seconds longer. Restarting the app container usually fixes this. In production, use a retry logic code.
-
-**2. `Keploy not detecting container`**
-- **Cause:** The `--container-name` flag doesn't match the service name in docker-compose.
-- **Fix:** Ensure you use `--container-name app` because our service is named `app` in `docker-compose.yml`.
-
-**3. `Port 8080 already in use`**
-- **Cause:** Another service is running on port 8080.
-- **Fix:** Stop other services or change the port mapping in `docker-compose.yml` (e.g., `"8081:8080"`).
+| Problem | Cause | Fix |
+|:--------|:------|:----|
+| `Failed to connect to DB` | Postgres not ready yet | The app retries 10 times automatically. If it still fails, check that Postgres is running and credentials match. |
+| `Keploy not detecting container` | Wrong `--container-name` | Use `--container-name keploy-cpp-app` (must match `container_name` in `docker-compose.yml`). |
+| `Port 8080 already in use` | Another process on 8080 | `lsof -i :8080` to find it, or change the port in `docker-compose.yml`. |
+| `CMake can't find libpqxx` | Missing dev package | `sudo apt install libpqxx-dev pkg-config` |
+| Docker build fails at Crow | Network issue during FetchContent | Ensure internet access; or pre-clone Crow into `Crow/` and adjust CMakeLists.txt. |
 
 ---
 
-## 🔒 Next Steps
+## 🚀 Next Steps
 
-Try changing the code in `src/main.cpp` (e.g., change "task" key to "title") and run `keploy test`. See how Keploy catches the breaking change!
+- **Break something on purpose** — change `"task"` to `"title"` in `main.cpp`, run `keploy test`, and watch it catch the regression.
+- **Add more endpoints** — try adding pagination, search, or tags.
+- **Try gRPC** — Keploy supports recording/replaying gRPC traffic as well.
+
+---
+
+## 📚 Resources
+
+- [Keploy Documentation](https://keploy.io/docs/)
+- [Crow C++ Documentation](https://crowcpp.org/master/)
+- [libpqxx Documentation](https://pqxx.org/development/libpqxx/)
+- [PostgreSQL Documentation](https://www.postgresql.org/docs/)
+
+---
+
+**Happy testing! 🐰**

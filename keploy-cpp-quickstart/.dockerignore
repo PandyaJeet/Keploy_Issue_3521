@@ -1,0 +1,19 @@
+# Ignore build artifacts
+build/
+_deps/
+
+# Ignore git metadata
+.git/
+.gitignore
+.gitkeep
+
+# Ignore Keploy test data (not needed during Docker build)
+keploy/
+
+# Ignore docs
+README.md
+LICENSE
+
+# Ignore editor configs
+.vscode/
+.idea/
